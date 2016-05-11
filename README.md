@@ -3,13 +3,21 @@
 
 Brief description goes here...
 
-#Install Instructions
+##Install Instructions
 <ol>
 	<li>...</li>
 	<li>...</li>
 	<li>...</li>
 	<li>...</li>
 </ol>
+
+##FAQ
+<ul>
+	<li>What about this?</li>
+	<li>What about that?</li>
+	<li>...</li>
+	<li>...</li>
+</ul>
 
 #License
 
