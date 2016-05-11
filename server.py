@@ -7,15 +7,15 @@ app = Flask(__name__)
 def showAllInv():
 	return "Here is the entire inventory, all floorplans and all units."
 
-@app.route('/floorplan/<floorplan_id>')
+@app.route('/floorplan/<floorplan_id>/')
 def showFloorplanInv(floorplan_id):
 	return "Here are all units for the %s floorplan." % (floorplan_id,)
 
-@app.route('/floorplan/<floorplan_id>/unit/<unit_id>')
+@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/')
 def showUnitDetail(floorplan_id, unit_id):
 	return "Here are specific details for unit %s, which has the %s floorplan." % (unit_id, floorplan_id)
 
-@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit')
+@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/')
 def showUnitDetail(floorplan_id, unit_id):
 	return "This URL allows for editing details about unit %s." % (unit_id)
 
