@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 app = Flask(__name__)
 
 @app.route('/')
@@ -16,8 +16,8 @@ def showUnitDetail(floorplan_id, unit_id):
 	return "Here are specific details for unit %s, which has the %s floorplan." % (unit_id, floorplan_id)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/')
-def showUnitDetail(floorplan_id, unit_id):
-	return "This URL allows for editing details about unit %s." % (unit_id)
+def editUnit(floorplan_id, unit_id):
+	return "This URL allows for EDITING details about unit %s." % (unit_id,)
 
 
 if __name__ == '__main__':
