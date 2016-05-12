@@ -1,9 +1,21 @@
 <!DOCTYPE html>
 <head>
-	
-
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+	<title>Apartment Inventory</title>
 </head>
 <body>
-	
-	
+	<h1>Apartment Inventory</h1>
+
+	{% block entire_pane %}	
+
+		{% block floorplan %}
+			<div>This is where the floorplan template would go.</div>
+		{% endblock %}
+
+		{% block unit %}
+			<div>This is where the unit template would go.</div>
+		{% endblock %}
+
+	{% endblock %}
+
 </body>
