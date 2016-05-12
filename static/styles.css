@@ -31,7 +31,7 @@ body {
 	background-color: #f1e4da;
 }
 
-.item-description {
+.item-description{
 	color:  #808080;
 	font-style: italic;
 	border: 1px solid black;
@@ -58,4 +58,9 @@ a :hover {
 
 td {
 	border: 1px solid black;
+	width: 30%;
+}
+
+#input_field {
+	width: 96%;
 }
