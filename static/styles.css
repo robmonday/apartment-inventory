@@ -55,3 +55,7 @@ a {
 a :hover {
 	color: #ff0000;
 }
+
+td {
+	border: 1px solid black;
+}
