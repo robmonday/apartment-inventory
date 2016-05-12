@@ -7,15 +7,39 @@
 <p><a href="{{url_for('showAllInv')}}">Cancel</a></p>
 </block>
 <div class="item-description">
+	<form>
+	<table>	
+		<tr>
+			<td>Floorplan</td>
+			<td>{{unit.floorplan.name}}</td>
+		</tr>
+		<tr>
+			<td>Bedrooms</td>
+			<td>{{unit.floorplan.bedrooms}}</td>
+		</tr>
+		<tr>
+			<td>Bathrooms</td>
+			<td>{{unit.floorplan.bathrooms}}</td>
+		</tr>
+		<tr>
+			<td>SF</td>
+			<td>{{unit.floorplan.square_footage}}</td>
+		</tr>	
+		<tr>
+			<td>Status</td>
+			<td><input id="input_field" type="Text" placeholder="{{unit.status}}"></input></td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td><input id="input_field" type="Text" placeholder="{{unit.description}}"></input></td>
+		</tr>
+	</table>
 
-	<p>{{unit.floorplan.name}} Floorplan </p>
-	<p>{{unit.floorplan.bedrooms}} Bedrooms</p>
-	<p>{{unit.floorplan.bathrooms}} Bathrooms</p>
-	<p>{{unit.floorplan.square_footage}} SF</p>
-	<p>{{unit.description}}</p>
+	<input type="Submit" value="Save Info">
+		
+	</form>
+
+
 </div>
 
-
-
 {% endblock %}
-
