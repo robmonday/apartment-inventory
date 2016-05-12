@@ -20,27 +20,23 @@ session = DBSession()
 def showAllInv():
 	floorplans = session.query(Floorplan).all()
 	units = session.query(Unit).all()
-	# return "Here is the entire inventory, all floorplans and all units."
 	return render_template('index.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/')
 def showFloorplan(floorplan_id):
-	# return "Here are all units for the %s floorplan." % (floorplan_id,)
-	# return render_template('floorplan.html', floorplan_id = floorplan_id)
-
 	floorplans = session.query(Floorplan).filter_by(id=floorplan_id).all()
 	units = session.query(Unit).filter_by(floorplan_id=floorplan_id).all()
 	return render_template('floorplan.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/')
 def showUnit(floorplan_id, unit_id):
-	# return "Here are specific details for unit %s, which has the %s floorplan." % (unit_id, floorplan_id)
-	return render_template('unit.html', floorplan_id = floorplan_id, unit_id = unit_id)
+	unit = session.query(Unit).filter_by(id=unit_id).one()
+	return render_template('unit.html', unit = unit)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/')
 def editUnit(floorplan_id, unit_id):
-	# return "This URL allows for EDITING details about unit %s." % (unit_id,)
-	return render_template('editunit.html', floorplan_id = floorplan_id, unit_id = unit_id)
+	unit = session.query(Unit).filter_by(id=unit_id).one()
+	return render_template('editunit.html', unit = unit)
 
 
 if __name__ == '__main__':

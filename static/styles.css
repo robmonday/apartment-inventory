@@ -34,7 +34,12 @@ body {
 .item-description {
 	color:  #808080;
 	font-style: italic;
+	border: 1px solid black;
+	width: 80%;
+	padding: 10px;
 }
+
+
 
 .flash-message {
 	background-color: LightGray;
