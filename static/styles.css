@@ -14,7 +14,7 @@ body {
 .pane {
 	border: 1px solid black;
 	width: 45%;
-	min-width: 200px;
+	min-width: 150px;
 	padding: 10px;
 	display: flex;
 	flex-wrap: wrap;

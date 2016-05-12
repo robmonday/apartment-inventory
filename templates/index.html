@@ -15,7 +15,7 @@
 
 			{% for floorplan in floorplans %}
 			
-			<a href="{{url_for('showFloorplanInv',floorplan_id=floorplan.id)}}">
+			<a href="{{url_for('showFloorplan',floorplan_id=floorplan.id)}}">
 			<div class="floorplan">
 				<strong>{{floorplan.name}}</strong><br>
 				<p>{{floorplan.bedrooms}} BR / {{floorplan.bathrooms}} BA
@@ -31,7 +31,7 @@
 			<!-- Default is to show all units.<br> -->
 			
 			{% for unit in units %}
-			<a href="{{url_for('showUnitDetail',floorplan_id=unit.floorplan.id, unit_id=unit.id)}}">
+			<a href="{{url_for('showUnit',floorplan_id=unit.floorplan.id, unit_id=unit.id)}}">
 			<div class="unit">
 				<strong>{{unit.name}}</strong><br>
 				{{unit.floorplan.name}}<br>

@@ -24,7 +24,7 @@ def showAllInv():
 	return render_template('index.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/')
-def showFloorplanInv(floorplan_id):
+def showFloorplan(floorplan_id):
 	# return "Here are all units for the %s floorplan." % (floorplan_id,)
 	# return render_template('floorplan.html', floorplan_id = floorplan_id)
 
@@ -33,7 +33,7 @@ def showFloorplanInv(floorplan_id):
 	return render_template('floorplan.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/')
-def showUnitDetail(floorplan_id, unit_id):
+def showUnit(floorplan_id, unit_id):
 	# return "Here are specific details for unit %s, which has the %s floorplan." % (unit_id, floorplan_id)
 	return render_template('unit.html', floorplan_id = floorplan_id, unit_id = unit_id)
 
