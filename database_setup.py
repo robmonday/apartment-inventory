@@ -33,6 +33,7 @@ class Unit(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
+    status = Column(String(20), default='Vacant')
     description = Column(String(300), default='No description provided...')
     floorplan_id = Column(Integer, ForeignKey('floorplan.id'))
     floorplan = relationship(Floorplan)
