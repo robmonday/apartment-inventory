@@ -6,16 +6,22 @@
 <body>
 	<h1>Apartment Inventory</h1>
 
+	<div class="container">
 	{% block entire_pane %}	
 
+		<div class="pane">
 		{% block floorplan %}
-			<div>This is where the floorplan template would go.</div>
+		This is where the floorplan template would go.
 		{% endblock %}
-
+		</div>
+		
+		<div class="pane">
 		{% block unit %}
-			<div>This is where the unit template would go.</div>
+		This is where the unit template would go.
 		{% endblock %}
+		</div>
 
 	{% endblock %}
+	</div>
 
 </body>
