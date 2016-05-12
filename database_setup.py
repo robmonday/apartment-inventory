@@ -14,7 +14,7 @@ class Floorplan(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
-    description = Column(String(300))
+    description = Column(String(300), default='No description provided...')
     square_footage = Column(Integer, nullable=False)
     bedrooms = Column(Integer, nullable=False)
     bathrooms = Column(Integer, nullable=False)
@@ -33,7 +33,7 @@ class Unit(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(50))
-    description = Column(String(300))
+    description = Column(String(300), default='No description provided...')
     floorplan_id = Column(Integer, ForeignKey('floorplan.id'))
     floorplan = relationship(Floorplan)
     @property
