@@ -16,9 +16,22 @@ body {
 	width: 45%;
 	min-width: 200px;
 	padding: 20px;
+	display: flex;
+	flex-wrap: wrap;
 }
 
-table {
+.pane div {
+	width: 100px;
+	background-color: #ead9c7;
+	margin: 10px;
+	padding: 10px;
+}
+
+.pane div :hover {
+	background-color: #f1e4da;
+}
+
+/*table {
 	width: 500px;
 	background-color: #ead9c7;
 	margin: 10px;
@@ -27,7 +40,7 @@ table {
 
 table:hover {
 	background-color: #f1e4da;
-}
+}*/
 
 .item-description {
 	color:  #808080;

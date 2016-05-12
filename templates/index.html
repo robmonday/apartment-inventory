@@ -11,13 +11,23 @@
 
 		<div class="pane">
 		{% block floorplan %}
-			This is where the floorplan template would go.
+			<!-- Default is to show all floorplans.<br> -->
+
+			{% for floorplan in floorplans %}
+			<div>{{floorplan.name}}</div>
+			{% endfor %}
+
 		{% endblock %}
 		</div>
 		
 		<div class="pane">
 		{% block unit %}
-			This is where the unit template would go.
+			<!-- Default is to show all units.<br> -->
+			
+			{% for unit in units %}
+			<div>{{unit.name}}</div>
+			{% endfor %}
+
 		{% endblock %}
 		</div>
 

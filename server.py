@@ -18,8 +18,11 @@ session = DBSession()
 @app.route('/all/')
 @app.route('/inventory/')
 def showAllInv():
+	
+	floorplans = session.query(Floorplan).all()
+	units = session.query(Unit).all()
 	# return "Here is the entire inventory, all floorplans and all units."
-	return render_template('index.html')
+	return render_template('index.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/')
 def showFloorplanInv(floorplan_id):
