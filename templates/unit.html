@@ -1,7 +1,10 @@
-{% extends "floorplan.html" %}
+{% extends "index.html" %}
 
-{% block unit %}
+{% block entire_pane %}
 
-I am the unit template, and I am rendered for unit #{{unit_id}}.
+<div class="pane">
+I am rendered to provide specific data for unit #{{floorplan_name}}-{{unit_name}}.
+</div>
+
 
 {% endblock %}

@@ -1,13 +1,20 @@
 {% extends "index.html" %}
 
+
 {% block floorplan %}
+	<!-- Default is to show all floorplans.<br> -->
 
-I am the floorplan template, and I am rendered for floorplan #{{floorplan_id}}.
+	<a href="{{url_for('showAllInv')}}">Back</a>
 
-{% endblock %}
-
-{% block unit %}
-
-This is where the unit template would go.
+	{% for floorplan in floorplans %}
+	
+	<a href="#">
+	<div class="floorplan">
+		<strong>{{floorplan.name}}</strong><br>
+		<p>{{floorplan.bedrooms}} BR / {{floorplan.bathrooms}} BA
+		{{floorplan.square_footage}} SF</p>
+	</div>
+	</a>
+	{% endfor %}
 
 {% endblock %}

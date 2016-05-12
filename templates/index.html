@@ -14,21 +14,34 @@
 			<!-- Default is to show all floorplans.<br> -->
 
 			{% for floorplan in floorplans %}
-			<div>{{floorplan.name}}</div>
+			
+			<a href="{{url_for('showFloorplanInv',floorplan_id=floorplan.id)}}">
+			<div class="floorplan">
+				<strong>{{floorplan.name}}</strong><br>
+				<p>{{floorplan.bedrooms}} BR / {{floorplan.bathrooms}} BA
+				{{floorplan.square_footage}} SF</p>
+			</div>
+			</a>
 			{% endfor %}
 
 		{% endblock %}
 		</div>
 		
 		<div class="pane">
-		{% block unit %}
 			<!-- Default is to show all units.<br> -->
 			
 			{% for unit in units %}
-			<div>{{unit.name}}</div>
+			<a href="{{url_for('showUnitDetail',floorplan_id=unit.floorplan.id, unit_id=unit.id)}}">
+			<div class="unit">
+				<strong>{{unit.name}}</strong><br>
+				{{unit.floorplan.name}}<br>
+				{{unit.floorplan.bedrooms}} BR / {{unit.floorplan.bathrooms}} BA
+				{{unit.floorplan.square_footage}} SF
+
+			</div>
+			</a>
 			{% endfor %}
 
-		{% endblock %}
 		</div>
 
 	{% endblock %}

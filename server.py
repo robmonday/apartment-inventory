@@ -18,7 +18,6 @@ session = DBSession()
 @app.route('/all/')
 @app.route('/inventory/')
 def showAllInv():
-	
 	floorplans = session.query(Floorplan).all()
 	units = session.query(Unit).all()
 	# return "Here is the entire inventory, all floorplans and all units."
@@ -27,7 +26,11 @@ def showAllInv():
 @app.route('/floorplan/<floorplan_id>/')
 def showFloorplanInv(floorplan_id):
 	# return "Here are all units for the %s floorplan." % (floorplan_id,)
-	return render_template('floorplan.html', floorplan_id = floorplan_id)
+	# return render_template('floorplan.html', floorplan_id = floorplan_id)
+
+	floorplans = session.query(Floorplan).filter_by(id=floorplan_id).all()
+	units = session.query(Unit).filter_by(floorplan_id=floorplan_id).all()
+	return render_template('floorplan.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/')
 def showUnitDetail(floorplan_id, unit_id):
