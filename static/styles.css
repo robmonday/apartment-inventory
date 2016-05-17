@@ -63,6 +63,7 @@ td {
 
 #input_field {
 	width: 96%;
+	min-width: 500px;
 }
 
 #login-button {

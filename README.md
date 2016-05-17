@@ -1,22 +1,22 @@
 #Apartment Inventory
 ##Udacity Fullstack Nanodegree Project
 
-Brief description goes here...
+This project is part of the Udacity Fullstack Nanodegree.  It is designed to showcase ability to pull together frameworks including SQLAlchemy and Flask, while using new skills in Python.
+
+The use case is for an apartment complex leasing office that is offering apartments to rent for the general public.  Unauthenticated users can see apartment availability.  Additionally the leasing office manager can log into the website in order to make changes to the units available, or their status.
 
 ##Install Instructions
 <ol>
-	<li>...</li>
-	<li>...</li>
-	<li>...</li>
-	<li>...</li>
+	<li>Run database_setup.py to create database on server.</li>
+	<li>Run populate_data.py to add some initial data to the database (if you do not wish to create it manually).</li>
+	<li>Visit <a href="http://127.0.0.1:5000">http://127.0.0.1:5000</a> to begin!</li>
 </ol>
 
 ##FAQ
 <ul>
-	<li>What about this?</li>
-	<li>What about that?</li>
-	<li>...</li>
-	<li>...</li>
+	<li>Was this project difficult?</li>  Yes!
+	<li>Did it take very much time to complete?</li>  Yes!
+	<li>Was it worth it?</li>  Probably.
 </ul>
 
 #License
