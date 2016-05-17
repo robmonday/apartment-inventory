@@ -48,6 +48,17 @@ def editUnit(floorplan_id, unit_id):
 		unit = session.query(Unit).filter_by(id=unit_id).one()
 		return render_template('editunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)
 
+@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
+def deleteUnit(floorplan_id, unit_id):
+	deletedUnit = session.query(Unit).filter_by(id=unit_id).one() 
+	if request.method == 'POST':
+		session.delete(deletedUnit)
+		session.commit()
+		return redirect(url_for('showAllInv'))
+	else:
+		unit = session.query(Unit).filter_by(id=unit_id).one()
+		return render_template('deleteunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)		
+
 if __name__ == '__main__':
 	app.debug = True
 	app.run(host = '0.0.0.0', port = 5000)

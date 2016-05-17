@@ -4,6 +4,7 @@
 <block>
 <h3>Unit #{{unit.name}}</h3>
 <p><a href="{{url_for('editUnit', unit_id = unit.id, floorplan_id = unit.floorplan.id)}}">Edit</a></p>
+<p><a href="{{url_for('deleteUnit', unit_id = unit.id, floorplan_id = unit.floorplan.id)}}">Delete</a></p>
 <p><a href="{{url_for('showAllInv')}}">Back</a></p>
 </block>
 <div class="item-description">
