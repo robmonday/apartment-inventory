@@ -33,11 +33,20 @@ def showUnit(floorplan_id, unit_id):
 	unit = session.query(Unit).filter_by(id=unit_id).one()
 	return render_template('unit.html', unit = unit)
 
-@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/')
+@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/', methods=['GET','POST'])
 def editUnit(floorplan_id, unit_id):
-	unit = session.query(Unit).filter_by(id=unit_id).one()
-	return render_template('editunit.html', unit = unit)
-
+	editedUnit = session.query(Unit).filter_by(id=unit_id).one() 
+	if request.method == 'POST':
+		if request.form['Description']:
+			editedUnit.description = request.form['Description']
+		if request.form['Status']:
+			editedUnit.status = request.form['Status']
+		session.add(editedUnit)
+		session.commit()
+		return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
+	else:
+		unit = session.query(Unit).filter_by(id=unit_id).one()
+		return render_template('editunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)
 
 if __name__ == '__main__':
 	app.debug = True

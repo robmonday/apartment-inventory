@@ -7,7 +7,7 @@
 <p><a href="{{url_for('showAllInv')}}">Cancel</a></p>
 </block>
 <div class="item-description">
-	<form>
+	<form action="{{url_for('editUnit', editedUnit = unit, floorplan_id=floorplan_id, unit_id=unit_id)}}" method='POST'>
 	<table>	
 		<tr>
 			<td>Floorplan</td>
@@ -27,11 +27,11 @@
 		</tr>	
 		<tr>
 			<td>Status</td>
-			<td><input id="input_field" type="Text" placeholder="{{unit.status}}"></input></td>
+			<td><input id="input_field" name="Status" type="text" placeholder="{{unit.status}}"></input></td>
 		</tr>
 		<tr>
 			<td>Description</td>
-			<td><input id="input_field" type="Text" placeholder="{{unit.description}}"></input></td>
+			<td><input id="input_field" name="Description" type="text" placeholder="{{unit.description}}"></input></td>
 		</tr>
 	</table>
 
