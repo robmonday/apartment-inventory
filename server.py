@@ -3,10 +3,10 @@ from flask import Flask, render_template, request, redirect, url_for, flash, jso
 app = Flask(__name__)
 
 
-# From SQLalchemy
+# SQLalchemy Configuration
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Floorplan, Unit
+from database_setup import Base, Floorplan, Unit, User
 engine = create_engine('sqlite:///apartment-inventory.db')
 Base.metadata.bind = engine
 
