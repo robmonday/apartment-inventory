@@ -18,23 +18,27 @@ session = DBSession()
 @app.route('/all/')
 @app.route('/inventory/')
 def showAllInv():
+	"""See all units together.  Top Level."""
 	floorplans = session.query(Floorplan).all()
 	units = session.query(Unit).all()
 	return render_template('index.html', floorplans = floorplans, units = units)
 
-@app.route('/floorplan/<floorplan_id>/')
+@app.route('/floorplan/<floorplan_id>/') 
 def showFloorplan(floorplan_id):
+	"""See all units for a single floorplan."""
 	floorplans = session.query(Floorplan).filter_by(id=floorplan_id).all()
 	units = session.query(Unit).filter_by(floorplan_id=floorplan_id).all()
 	return render_template('floorplan.html', floorplans = floorplans, units = units)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/')
 def showUnit(floorplan_id, unit_id):
+	"""See detail for a specific floorplan."""
 	unit = session.query(Unit).filter_by(id=unit_id).one()
 	return render_template('unit.html', unit = unit)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/', methods=['GET','POST'])
 def editUnit(floorplan_id, unit_id):
+	"""Change details for a specific unit"""
 	editedUnit = session.query(Unit).filter_by(id=unit_id).one() 
 	if request.method == 'POST':
 		if request.form['Description']:
@@ -50,6 +54,7 @@ def editUnit(floorplan_id, unit_id):
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
 def deleteUnit(floorplan_id, unit_id):
+	"""Delete a unit"""
 	deletedUnit = session.query(Unit).filter_by(id=unit_id).one() 
 	if request.method == 'POST':
 		session.delete(deletedUnit)
@@ -61,6 +66,7 @@ def deleteUnit(floorplan_id, unit_id):
 
 @app.route('/newunit/', methods=['GET','POST'])
 def newUnit():
+	"""Add a new unit, based on floorplans that are already available"""
 	if request.method == 'POST':
 		newUnit = Unit(name=request.form['Name'], status=request.form['Status'], description=request.form['Description'], floorplan_id=request.form['Floorplan_ID'])
 		session.add(newUnit)
