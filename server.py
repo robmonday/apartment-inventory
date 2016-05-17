@@ -23,6 +23,27 @@ def showAllInv():
 	units = session.query(Unit).all()
 	return render_template('index.html', floorplans = floorplans, units = units)
 
+@app.route('/JSON/')
+@app.route('/all/JSON/')
+@app.route('/inventory/JSON/')
+def allInvJSON():
+	"""JSON that returns all units in inventory"""
+	units = session.query(Unit).all()
+	return jsonify (Unit=[unit.serialize for unit in units])
+
+@app.route('/floorplan/<floorplan_id>/JSON/')
+def floorplanJSON(floorplan_id):
+	"""JSON that returns all units for a given floorplan"""
+	units = session.query(Unit).filter_by(floorplan_id=floorplan_id).all()
+	return jsonify (Unit=[unit.serialize for unit in units])
+
+@app.route('/unit/<unit_id>/JSON/')
+@app.route('/floorplan/<floorplan_id>/unit/<unit_id>/JSON/')
+def unitJSON(floorplan_id, unit_id):
+	"""JSON that returns information for a single unit"""
+	units = session.query(Unit).filter_by(id=unit_id).all()
+	return jsonify (Unit=[unit.serialize for unit in units])
+
 @app.route('/floorplan/<floorplan_id>/') 
 def showFloorplan(floorplan_id):
 	"""See all units for a single floorplan."""

@@ -21,6 +21,7 @@ class Floorplan(Base):
     @property
     def serialize(self):
         return {
+            'id': self.id,
             'name': self.name,
             'description': self.description,
             'square_footage': self.square_footage,
@@ -40,9 +41,14 @@ class Unit(Base):
     @property
     def serialize(self):
         return {
+            'id': self.name,
             'name': self.name,
+            'floorplan_id': self.floorplan_id,
+            'floorplan_name': self.floorplan.name,
+            'floorplan_bedrooms': self.floorplan.bedrooms,
+            'floorplan_bathrooms': self.floorplan.bathrooms,
+            'floorplan_square_footage': self.floorplan.square_footage,
             'description': self.description,
-            'floorplan_id': self.square_footage,
         }
     
 
