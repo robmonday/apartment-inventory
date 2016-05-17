@@ -49,8 +49,7 @@ def editUnit(floorplan_id, unit_id):
 		session.commit()
 		return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
 	else:
-		unit = session.query(Unit).filter_by(id=unit_id).one()
-		return render_template('editunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)
+		return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
 def deleteUnit(floorplan_id, unit_id):
@@ -61,8 +60,7 @@ def deleteUnit(floorplan_id, unit_id):
 		session.commit()
 		return redirect(url_for('showAllInv'))
 	else:
-		unit = session.query(Unit).filter_by(id=unit_id).one()
-		return render_template('deleteunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)
+		return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 
 @app.route('/newunit/', methods=['GET','POST'])
 def newUnit():
