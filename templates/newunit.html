@@ -1,0 +1,33 @@
+{% extends "index.html" %}
+
+{% block entire_pane %}
+
+<div class="item-description">
+	<form action="{{url_for('newUnit')}}" method='POST'>
+	<table>	
+		<tr>
+			<td>Unit #</td>
+			<td><input id="input_field" name="Name" type="text" placeholder="Can include letters, numbers, and symbols (i.e. #10-203)"></td>
+		</tr>
+		<tr>
+			<td>Floorplan #</td>
+			<td><input id="input_field" name="Floorplan_ID" type="text" placeholder="Enter a number here...not the floorplan name"></td>
+		</tr>
+		<tr>
+			<td>Status</td>
+			<td><input id="input_field" name="Status" type="text" placeholder="Vacant"></input></td>
+		</tr>
+		<tr>
+			<td>Description</td>
+			<td><input id="input_field" name="Description" type="text" placeholder="Unit-specific details go here..."></input></td>
+		</tr>
+
+
+	</table>
+
+	<input type="Submit" value="Submit">
+	<p><a href="{{url_for('showAllInv')}}">Cancel</a></p>
+
+</div>
+
+{% endblock %}

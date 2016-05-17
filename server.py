@@ -57,7 +57,17 @@ def deleteUnit(floorplan_id, unit_id):
 		return redirect(url_for('showAllInv'))
 	else:
 		unit = session.query(Unit).filter_by(id=unit_id).one()
-		return render_template('deleteunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)		
+		return render_template('deleteunit.html', unit = unit, floorplan_id=floorplan_id, unit_id=unit_id)
+
+@app.route('/newunit/', methods=['GET','POST'])
+def newUnit():
+	if request.method == 'POST':
+		newUnit = Unit(name=request.form['Name'], status=request.form['Status'], description=request.form['Description'], floorplan_id=request.form['Floorplan_ID'])
+		session.add(newUnit)
+		session.commit()
+		return redirect(url_for('showAllInv'))
+	else:
+		return render_template('newunit.html')					
 
 if __name__ == '__main__':
 	app.debug = True
