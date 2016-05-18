@@ -230,44 +230,34 @@ def showUnit(floorplan_id, unit_id):
 def editUnit(floorplan_id, unit_id):
 	"""Change details for a specific unit"""
 	editedUnit = session.query(Unit).filter_by(id=unit_id).one()
-	session_user = getUserID(login_session) 
-	if session_user == editedUnit.user_id:	
-		if request.method == 'POST':
-			if request.form['Description']:
-				editedUnit.description = request.form['Description']
-			if request.form['Status']:
-				editedUnit.status = request.form['Status']
-			session.add(editedUnit)
-			session.commit()
-			return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
-		else:
-			return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+	if request.method == 'POST':
+		if request.form['Description']:
+			editedUnit.description = request.form['Description']
+		if request.form['Status']:
+			editedUnit.status = request.form['Status']
+		session.add(editedUnit)
+		session.commit()
+		return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
 	else:
-		return ("""<script>function myFunction(){alert('You are not authorized to edit this record')}
-			</script><body onload='myFunction()'>""")
+		return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
 @login_required
 def deleteUnit(floorplan_id, unit_id):
 	"""Delete a unit"""
 	deletedUnit = session.query(Unit).filter_by(id=unit_id).one()
-	session_user = getUserID(login_session)
-	if session_user == deletedUnit.user_id:
-		if request.method == 'POST':
-			session.delete(deletedUnit)
-			session.commit()
-			return redirect(url_for('showAllInv'))
-		else:
-			return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
-	else: 
-		return ("""<script>function myFunction(){alert('You are not authorized to delete this record')}
-							</script><body onload='myFunction()'>""")
+	if request.method == 'POST':
+		session.delete(deletedUnit)
+		session.commit()
+		return redirect(url_for('showAllInv'))
+	else:
+		return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+
 
 @app.route('/newunit/', methods=['GET','POST'])
 @login_required
 def newUnit():
 	"""Add a new unit, based on floorplans that are already available"""
-	session_user = createUser(login_session)
 	if request.method == 'POST':
 		newUnit = Unit(
 			name=request.form['Name'], 
