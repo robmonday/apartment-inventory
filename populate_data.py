@@ -7,6 +7,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+import sys # allows python to take command-line variables 
 import json # import to enable reading JSON for unit info
 
 # Populate Floorplan Data
@@ -48,7 +49,12 @@ print "Floorplan data populated successfully!"
 # Populate Unit Data
 
 try:
-	with open('sample_data.json') as json_data:  # to see much more data, try:  sample_data_extended.json
+	json_data_file = 'sample_data.json'
+	print len(sys.argv)
+	if len(sys.argv)==2:
+		json_data_file = sys.argv[1]
+
+	with open(json_data_file) as json_data:  # to see much more data, try:  sample_data_extended.json
 	    dataload = json.load(json_data)
 	    units = dataload['Unit']
 	    # print units
