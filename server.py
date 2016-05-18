@@ -137,18 +137,19 @@ def gconnect():
     print "done!"
     return output
 
+@app.route('/logout/')
+def logout():
+	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
+	login_session['state'] = state
+	# return "The current session state is %s" % login_session['state']
+	return render_template('index.html', STATE=state)
+
 def createUser(login_session):
 	"""Create new user in database from login session, then return user ID"""
 	newUser = User(name = login_session['username'], email = login_session['email'], picture = login_session['picture'])
 	session.add(newUser)
 	session.commit()
-	# user = session.query(User).filter_by(email = login_session['email']).one()
 	user = session.query(User).filter_by(email = login_session['email']).all()[0]
-
-	# users = session.query(User).filter_by(email = login_session['email']).all() #Rob
-	# for u in users:  #Rob
-	# 	print u.id, u.name, u.email  #Rob
-
 	return user.id
 
 def getUserInfo(user_id):
