@@ -266,7 +266,6 @@ def deleteUnit(floorplan_id, unit_id):
 
 
 @app.route('/newunit/', methods=['GET','POST'])
-@login_required
 def newUnit():
 	"""Add a new unit, based on floorplans that are already available"""
 	if request.method == 'POST':
