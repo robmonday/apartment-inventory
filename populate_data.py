@@ -45,7 +45,7 @@ session.commit()
 print "Floorplan data populated successfully!"
 
 try:
-	with open('sample_data.json') as json_data:
+	with open('sample_data.json') as json_data:  # to see much more data, try:  sample_data_extended.json
 	    dataload = json.load(json_data)
 	    units = dataload['Unit']
 	    # print units
