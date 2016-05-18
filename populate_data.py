@@ -9,6 +9,7 @@ session = DBSession()
 
 import json # import to enable reading JSON for unit info
 
+# Populate Floorplan Data
 
 user1 = User(name='Unknown', email='Unknown')
 session.add(user1)
@@ -43,6 +44,8 @@ session.add(two_bedroom2)
 session.commit()
 
 print "Floorplan data populated successfully!"
+
+# Populate Unit Data
 
 try:
 	with open('sample_data.json') as json_data:  # to see much more data, try:  sample_data_extended.json
