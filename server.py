@@ -142,7 +142,9 @@ def logout():
 	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
 	login_session['state'] = state
 	# return "The current session state is %s" % login_session['state']
-	return render_template('index.html', STATE=state)
+	floorplans = session.query(Floorplan).all()
+	units = session.query(Unit).all()
+	return render_template('index.html', floorplans = floorplans, units = units)
 
 def createUser(login_session):
 	"""Create new user in database from login session, then return user ID"""
