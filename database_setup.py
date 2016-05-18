@@ -50,7 +50,7 @@ class Unit(Base):
     @property
     def serialize(self):
         return {
-            'id': self.name,
+            'id': self.id,
             'name': self.name,
             'floorplan_id': self.floorplan_id,
             'floorplan_name': self.floorplan.name,
