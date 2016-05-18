@@ -10,12 +10,7 @@ from database_setup import Base, Floorplan, Unit, User
 engine = create_engine('sqlite:///apartment-inventory.db')
 Base.metadata.bind = engine
 
-DBSession = sessionmaker(bind=engine)
-session = DBSession()
-
-"""================================================= Authentication Code"""
-
-#Import libraries used in 3rd-party authentication
+# Import libraries used in 3rd-party authentication
 from flask import session as login_session
 import random, string
 from oauth2client.client import flow_from_clientsecrets
@@ -25,14 +20,16 @@ import json
 from flask import make_response
 import requests
 
-CLIENT_ID = json.loads(open('client_secrets.json','r').read())['web']['client_id'] #this is how Google identifies the app
-APPLICATION_NAME = "Apartment Unit Availability"
-
 engine = create_engine('sqlite:///apartment-inventory.db')
 Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+"""================================================= Authentication Code"""
+
+CLIENT_ID = json.loads(open('client_secrets.json','r').read())['web']['client_id'] # this is how Google identifies the app
+APPLICATION_NAME = "Apartment Unit Availability"
 
 # Create anti-forgery state token
 @app.route('/login/')
@@ -132,7 +129,8 @@ def gconnect():
     output += '!</h1>'
     output += '<img src="'
     output += login_session['picture']
-    output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '
+    output += ''' " style = "width: 300px; height: 300px;border-radius: 150px;
+            -webkit-border-radius: 150px;-moz-border-radius: 150px;"> '''
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
@@ -229,7 +227,8 @@ def editUnit(floorplan_id, unit_id):
 		else:
 			return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 	else:
-		return ("<script>function myFunction(){alert('You are not authorized to edit this restaurant')}</script><body onload='myFunction()'>")
+		return ("""<script>function myFunction(){alert('You are not authorized to edit this record')}
+			</script><body onload='myFunction()'>""")
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
 def deleteUnit(floorplan_id, unit_id):
@@ -244,14 +243,20 @@ def deleteUnit(floorplan_id, unit_id):
 		else:
 			return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 	else: 
-		return ("<script>function myFunction(){alert('You are not authorized to delete this restaurant')}</script><body onload='myFunction()'>")
+		return ("""<script>function myFunction(){alert('You are not authorized to delete this record')}
+							</script><body onload='myFunction()'>""")
 
 @app.route('/newunit/', methods=['GET','POST'])
 def newUnit():
 	"""Add a new unit, based on floorplans that are already available"""
 	session_user = createUser(login_session)
 	if request.method == 'POST':
-		newUnit = Unit(name=request.form['Name'], status=request.form['Status'], description=request.form['Description'], floorplan_id=request.form['Floorplan_ID'], user_id=session_user)
+		newUnit = Unit(
+			name=request.form['Name'], 
+			status=request.form['Status'], 
+			description=request.form['Description'], 
+			floorplan_id=request.form['Floorplan_ID'], 
+			user_id=session_user)
 		session.add(newUnit)
 		session.commit()
 		return redirect(url_for('showAllInv'))
@@ -260,5 +265,5 @@ def newUnit():
 
 if __name__ == '__main__':
 	app.secret_key = 'super_secret_key'
-	app.debug = True
+	app.debug = True #Note: turn this off for production version
 	app.run(host = '0.0.0.0', port = 5000)
