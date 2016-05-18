@@ -114,11 +114,11 @@ def gconnect():
     login_session['email'] = data['email']
 
     # see if user email exists, if not make a new user
-    # user_records = session.query(User).filter_by(email=login_session['email']).all()
-    # if (len(user_records)<1):
-    # 	print "New user in database"
-    # else:
-    # 	print "Existing user in database"
+    user_records = session.query(User).filter_by(email=login_session['email']).all()
+    if (len(user_records)<1):
+    	print "New user in database"
+    else:
+    	print "Existing user in database"
 
     # Store user_id for login session:  see if user email exists, if not make a new user
     user_id = getUserID(login_session['email'])
@@ -212,34 +212,43 @@ def showUnit(floorplan_id, unit_id):
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/', methods=['GET','POST'])
 def editUnit(floorplan_id, unit_id):
 	"""Change details for a specific unit"""
-	editedUnit = session.query(Unit).filter_by(id=unit_id).one() 
-	if request.method == 'POST':
-		if request.form['Description']:
-			editedUnit.description = request.form['Description']
-		if request.form['Status']:
-			editedUnit.status = request.form['Status']
-		session.add(editedUnit)
-		session.commit()
-		return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
+	editedUnit = session.query(Unit).filter_by(id=unit_id).one()
+	session_user = createUser(login_session) 
+	if session_user == editedUnit.user_id:	
+		if request.method == 'POST':
+			if request.form['Description']:
+				editedUnit.description = request.form['Description']
+			if request.form['Status']:
+				editedUnit.status = request.form['Status']
+			session.add(editedUnit)
+			session.commit()
+			return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
+		else:
+			return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 	else:
-		return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+		return ("<script>function myFunction(){alert('You are not authorized to edit this restaurant')}</script><body onload='myFunction()'>")
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
 def deleteUnit(floorplan_id, unit_id):
 	"""Delete a unit"""
-	deletedUnit = session.query(Unit).filter_by(id=unit_id).one() 
-	if request.method == 'POST':
-		session.delete(deletedUnit)
-		session.commit()
-		return redirect(url_for('showAllInv'))
-	else:
-		return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+	deletedUnit = session.query(Unit).filter_by(id=unit_id).one()
+	session_user = createUser(login_session)
+	if session_user == deletedUnit.user_id:
+		if request.method == 'POST':
+			session.delete(deletedUnit)
+			session.commit()
+			return redirect(url_for('showAllInv'))
+		else:
+			return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+	else: 
+		return ("<script>function myFunction(){alert('You are not authorized to delete this restaurant')}</script><body onload='myFunction()'>")
 
 @app.route('/newunit/', methods=['GET','POST'])
 def newUnit():
 	"""Add a new unit, based on floorplans that are already available"""
+	session_user = createUser(login_session)
 	if request.method == 'POST':
-		newUnit = Unit(name=request.form['Name'], status=request.form['Status'], description=request.form['Description'], floorplan_id=request.form['Floorplan_ID'])
+		newUnit = Unit(name=request.form['Name'], status=request.form['Status'], description=request.form['Description'], floorplan_id=request.form['Floorplan_ID'], user_id=session_user)
 		session.add(newUnit)
 		session.commit()
 		return redirect(url_for('showAllInv'))
