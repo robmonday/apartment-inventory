@@ -10,7 +10,7 @@ from database_setup import Base, Floorplan, Unit, User
 engine = create_engine('sqlite:///apartment-inventory.db')
 Base.metadata.bind = engine
 
-# Import libraries used in 3rd-party authentication
+# Import libraries used in initial 3rd-party authentication
 from flask import session as login_session
 import random, string
 from oauth2client.client import flow_from_clientsecrets
@@ -20,6 +20,10 @@ import json
 from flask import make_response
 import requests
 
+# Import libraries used for login_required decorator
+from functools import wraps
+from flask import g, request, redirect, url_for
+
 engine = create_engine('sqlite:///apartment-inventory.db')
 Base.metadata.bind = engine
 
@@ -27,6 +31,9 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 """================================================= Authentication Code"""
+
+
+# Start of initial 3rd-party authentication
 
 CLIENT_ID = json.loads(open('client_secrets.json','r').read())['web']['client_id'] # this is how Google identifies the app
 APPLICATION_NAME = "Apartment Unit Availability"
@@ -165,6 +172,15 @@ def getUserID(email):
 	except:
 		return None
 
+def login_required(f):
+	"""Add login required decorator to ensure appropriate security"""
+	@wraps(f)
+	def decorated_function(*args, **kwargs):
+		if login_session.get('gplus_id') is None:  #Is this right?!  Where can I get a global variable that represents a logged in user
+			return redirect(url_for('showLogin', next=request.url))
+		return f(*args, **kwargs)
+	return decorated_function
+
 """================================================= Authentication Code"""
 
 @app.route('/')
@@ -190,7 +206,6 @@ def floorplanJSON(floorplan_id):
 	units = session.query(Unit).filter_by(floorplan_id=floorplan_id).all()
 	return jsonify (Unit=[unit.serialize for unit in units])
 
-@app.route('/unit/<unit_id>/JSON/')
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/JSON/')
 def unitJSON(floorplan_id, unit_id):
 	"""JSON that returns information for a single unit"""
@@ -211,10 +226,11 @@ def showUnit(floorplan_id, unit_id):
 	return render_template('unit.html', unit = unit)
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/edit/', methods=['GET','POST'])
+@login_required
 def editUnit(floorplan_id, unit_id):
 	"""Change details for a specific unit"""
 	editedUnit = session.query(Unit).filter_by(id=unit_id).one()
-	session_user = createUser(login_session) 
+	session_user = getUserID(login_session) 
 	if session_user == editedUnit.user_id:	
 		if request.method == 'POST':
 			if request.form['Description']:
@@ -231,10 +247,11 @@ def editUnit(floorplan_id, unit_id):
 			</script><body onload='myFunction()'>""")
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
+@login_required
 def deleteUnit(floorplan_id, unit_id):
 	"""Delete a unit"""
 	deletedUnit = session.query(Unit).filter_by(id=unit_id).one()
-	session_user = createUser(login_session)
+	session_user = getUserID(login_session)
 	if session_user == deletedUnit.user_id:
 		if request.method == 'POST':
 			session.delete(deletedUnit)
@@ -247,6 +264,7 @@ def deleteUnit(floorplan_id, unit_id):
 							</script><body onload='myFunction()'>""")
 
 @app.route('/newunit/', methods=['GET','POST'])
+@login_required
 def newUnit():
 	"""Add a new unit, based on floorplans that are already available"""
 	session_user = createUser(login_session)
