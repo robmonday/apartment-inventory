@@ -1,3 +1,5 @@
+import sys
+
 # Flask configuration
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 app = Flask(__name__)
@@ -7,8 +9,6 @@ app = Flask(__name__)
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Floorplan, Unit, User
-engine = create_engine('sqlite:///apartment-inventory.db')
-Base.metadata.bind = engine
 
 # Import libraries used in initial 3rd-party authentication
 from flask import session as login_session
@@ -144,12 +144,9 @@ def gconnect():
 
 @app.route('/logout/')
 def logout():
-	state = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in xrange(32))
-	login_session['state'] = state
-	# return "The current session state is %s" % login_session['state']
-	floorplans = session.query(Floorplan).all()
-	units = session.query(Unit).all()
-	return render_template('index.html', floorplans = floorplans, units = units)
+	"""remove the username from the session if it's there"""
+	login_session.pop('user_id', None)
+	return redirect(url_for('showAllInv'))
 
 def createUser(login_session):
 	"""Create new user in database from login session, then return user ID"""
@@ -176,7 +173,7 @@ def login_required(f):
 	"""Add login required decorator to ensure appropriate security"""
 	@wraps(f)
 	def decorated_function(*args, **kwargs):
-		if login_session.get('gplus_id') is None:  #Is this right?!  Where can I get a global variable that represents a logged in user
+		if login_session.get('user_id') is None: #Is this right?!  Where can I get a global variable that represents a logged in user
 			return redirect(url_for('showLogin', next=request.url))
 		return f(*args, **kwargs)
 	return decorated_function
@@ -229,29 +226,43 @@ def showUnit(floorplan_id, unit_id):
 @login_required
 def editUnit(floorplan_id, unit_id):
 	"""Change details for a specific unit"""
+	print "login required...current user_id is"
+	print login_session.get('user_id')
+	session_user = getUserID(login_session)
 	editedUnit = session.query(Unit).filter_by(id=unit_id).one()
-	if request.method == 'POST':
-		if request.form['Description']:
-			editedUnit.description = request.form['Description']
-		if request.form['Status']:
-			editedUnit.status = request.form['Status']
-		session.add(editedUnit)
-		session.commit()
-		return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
+	if session_user == editedUnit.user_id:
+		if request.method == 'POST':
+			if request.form['Description']:
+				editedUnit.description = request.form['Description']
+			if request.form['Status']:
+				editedUnit.status = request.form['Status']
+			session.add(editedUnit)
+			session.commit()
+			return redirect(url_for('showUnit', floorplan_id=floorplan_id, unit_id=unit_id))
+		else:
+			return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 	else:
-		return render_template('editunit.html', unit = editedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+		return ("""<script>function myFunction(){alert('You are not authorized to edit this record')}
+			</script><body onload='myFunction()'>""")				
 
 @app.route('/floorplan/<floorplan_id>/unit/<unit_id>/delete/', methods=['GET','POST'])
 @login_required
 def deleteUnit(floorplan_id, unit_id):
 	"""Delete a unit"""
+	print "login required...current user_id is"
+	print login_session.get('user_id')
 	deletedUnit = session.query(Unit).filter_by(id=unit_id).one()
-	if request.method == 'POST':
-		session.delete(deletedUnit)
-		session.commit()
-		return redirect(url_for('showAllInv'))
+	session_user = getUserID(login_session)
+	if session_user == deletedUnit.user_id:
+		if request.method == 'POST':
+			session.delete(deletedUnit)
+			session.commit()
+			return redirect(url_for('showAllInv'))
+		else:
+			return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
 	else:
-		return render_template('deleteunit.html', unit = deletedUnit, floorplan_id=floorplan_id, unit_id=unit_id)
+		return ("""<script>function myFunction(){alert('You are not authorized to delete this record')}
+							</script><body onload='myFunction()'>""")
 
 
 @app.route('/newunit/', methods=['GET','POST'])
@@ -263,8 +274,8 @@ def newUnit():
 			name=request.form['Name'], 
 			status=request.form['Status'], 
 			description=request.form['Description'], 
-			floorplan_id=request.form['Floorplan_ID'], 
-			user_id=session_user)
+			floorplan_id=request.form['Floorplan_ID']
+			)
 		session.add(newUnit)
 		session.commit()
 		return redirect(url_for('showAllInv'))
