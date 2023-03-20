@@ -7,7 +7,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-import sys # allows python to take command-line variables 
+import sys # allows python to take command-line variables
 import json # import to enable reading JSON for unit info
 
 # Populate Floorplan Data
@@ -44,28 +44,29 @@ two_bedroom2 = Floorplan(name='Large Two-Bed', square_footage=1150, bedrooms=2, 
 session.add(two_bedroom2)
 session.commit()
 
-print "Floorplan data populated successfully!"
+print("Floorplan data populated successfully!")
 
 # Populate Unit Data
 
 try:
 	json_data_file = 'sample_data.json'
-	print len(sys.argv)
+	print(len(sys.argv))
 	if len(sys.argv)==2:
 		json_data_file = sys.argv[1]
 
 	with open(json_data_file) as json_data:  # to see much more data, try:  sample_data_extended.json
 	    dataload = json.load(json_data)
 	    units = dataload['Unit']
+
 	    # print units
 	    iteration_num = 0
 	    for unit in units:
 	    	iteration_num += 1
-	    	print 'Add unit # '+str(iteration_num)
+	    	print('Add unit # '+str(iteration_num))
 	    	entry = Unit(name=unit['name'], floorplan_id=unit['floorplan_id'], user_id=unit['user_id'])
 	    	session.add(entry)
 	    	session.commit()
-	print "Unit data populated successfully!"
+	print("Unit data populated successfully!")
 except:
-	print "JSON did not load"
+	print("JSON did not load")
 

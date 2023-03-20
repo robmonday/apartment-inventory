@@ -91,7 +91,7 @@ def gconnect():
     if result['issued_to'] != CLIENT_ID:
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
-        print "Token's client ID does not match app's."
+        print("Token's client ID does not match app's.")
         response.headers['Content-Type'] = 'application/json'
         return response
 
@@ -120,9 +120,9 @@ def gconnect():
     # see if user email exists, if not make a new user
     user_records = session.query(User).filter_by(email=login_session['email']).all()
     if (len(user_records)<1):
-    	print "New user in database"
+    	print("New user in database")
     else:
-    	print "Existing user in database"
+    	print("Existing user in database")
 
     # Store user_id for login session:  see if user email exists, if not make a new user
     user_id = getUserID(login_session['email'])
@@ -139,7 +139,7 @@ def gconnect():
     output += ''' " style = "width: 300px; height: 300px;border-radius: 150px;
             -webkit-border-radius: 150px;-moz-border-radius: 150px;"> '''
     flash("you are now logged in as %s" % login_session['username'])
-    print "done!"
+    print("done!")
     return output
 
 @app.route('/logout/')
@@ -226,8 +226,8 @@ def showUnit(floorplan_id, unit_id):
 @login_required
 def editUnit(floorplan_id, unit_id):
 	"""Change details for a specific unit"""
-	print "login required...current user_id is"
-	print login_session.get('user_id')
+	print("login required...current user_id is")
+	print(login_session.get('user_id'))
 	session_user = getUserID(login_session)
 	editedUnit = session.query(Unit).filter_by(id=unit_id).one()
 	if session_user == editedUnit.user_id:
@@ -249,8 +249,8 @@ def editUnit(floorplan_id, unit_id):
 @login_required
 def deleteUnit(floorplan_id, unit_id):
 	"""Delete a unit"""
-	print "login required...current user_id is"
-	print login_session.get('user_id')
+	print("login required...current user_id is")
+	print(login_session.get('user_id'))
 	deletedUnit = session.query(Unit).filter_by(id=unit_id).one()
 	session_user = getUserID(login_session)
 	if session_user == deletedUnit.user_id:
